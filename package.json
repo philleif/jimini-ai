@@ -19,6 +19,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "bitfinex-api-node": "^2.0.0-beta.1",
+    "csv-writer": "^1.0.0",
     "dotenv": "^5.0.1",
     "mongoose": "^5.0.17"
   }
