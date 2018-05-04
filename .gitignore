@@ -5,6 +5,12 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# Mongo data from Docker
+data
+
+#temp files
+tmp/
+
 # Runtime data
 pids
 *.pid
@@ -57,3 +63,13 @@ typings/
 # dotenv environment variables file
 .env
 
+.DS_Store
+.gitignore
+.vscode/settings.json
+
+# tensorflow
+__pycache__
+output
+saved_model.pb
+ppo_model*
+checkpoint

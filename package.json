@@ -1,0 +1,25 @@
+{
+  "name": "jimini-ai",
+  "version": "1.0.0",
+  "description": "Enhanced Jimini bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/philleif/jimini-ai.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/philleif/jimini-ai/issues"
+  },
+  "homepage": "https://github.com/philleif/jimini-ai#readme",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "bitfinex-api-node": "^2.0.0-beta.1",
+    "dotenv": "^5.0.1",
+    "mongoose": "^5.0.17"
+  }
+}
