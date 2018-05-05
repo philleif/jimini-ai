@@ -13,7 +13,12 @@ const run = async () => {
 
   let data = await cleanCsv(candles)
 
-  await writeCsv(data)
+  let filePath = "data/candles.csv"
+  await writeCsv(data, filePath)
+
+  filePath = "data/candles-test.csv"
+  await writeCsv(data, filePath)
+
 }
 
 run()
