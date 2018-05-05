@@ -1,7 +1,7 @@
 "use strict"
 
 const exchanges = require("../lib/exchanges")
-const { writeCsv } = require("../lib/csv")
+const { writeCsv, cleanCsv } = require("../lib/csv")
 const { indicators } = require("../lib/indicators")
 
 const fields = ["long", "percentChange"]
@@ -13,9 +13,13 @@ const run = async () => {
     candles = await indicators[field](candles)
   })
 
-  console.log(candles)
+  let data = await cleanCsv(candles)
 
-  await writeCsv(candles)
+  //console.log(candles)
+
+  console.log(data)
+
+  await writeCsv(data)
 }
 
 run()
