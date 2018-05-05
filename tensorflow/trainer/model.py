@@ -10,11 +10,11 @@ import tensorflow as tf
 
 # Define the format of input data including unused columns
 CSV_COLUMNS = [
-    'mts', 'open', 'close', 'high', 'low', 'volume', 'percentChange',
+    'mts', 'open', 'close', 'high', 'low', 'volume', 'pair', 'timeframe', 'percentChange',
     'strategy'
 ]
 
-CSV_COLUMN_DEFAULTS = [[0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], ['']]
+CSV_COLUMN_DEFAULTS = [[0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [''], [''], [0.0], ['']]
 
 LABEL_COLUMN = 'strategy'
 
