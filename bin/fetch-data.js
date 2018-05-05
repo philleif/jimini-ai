@@ -13,11 +13,11 @@ const run = async () => {
 
   let data = await cleanCsv(candles)
 
-  let filePath = "data/candles.csv"
-  await writeCsv(data, filePath)
+  let filePath = "tensorflow/data/candles.csv"
+  await writeCsv(data, filePath, false)
 
-  filePath = "data/candles-test.csv"
-  await writeCsv(data, filePath)
+  filePath = "tensorflow/data/candles-test.csv"
+  await writeCsv(data, filePath, false)
 
 }
 
