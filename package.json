@@ -1,34 +1,22 @@
 {
   "name": "jimini-ai",
-  "version": "1.0.0",
-  "description": "Enhanced Jimini bot",
-  "main": "index.js",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./bin/www"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/philleif/jimini-ai.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/philleif/jimini-ai/issues"
-  },
-  "homepage": "https://github.com/philleif/jimini-ai#readme",
   "dependencies": {
-    "@tensorflow/tfjs": "^0.11.1",
-    "@tensorflow/tfjs-node": "^0.1.2",
     "array-normalize": "^1.1.3",
     "axios": "^0.18.0",
-    "bitfinex-api-node": "^2.0.0-beta.1",
+    "cookie-parser": "~1.4.3",
+    "csv-parse": "^2.4.0",
     "csv-writer": "^1.0.0",
-    "dotenv": "^5.0.1",
-    "mongoose": "^5.0.17",
-    "node-fetch": "^2.1.2",
-    "node-gyp": "^3.6.2",
+    "debug": "~2.6.9",
+    "express": "~4.16.0",
+    "http-errors": "~1.6.2",
+    "morgan": "~1.9.0",
+    "pug": "2.0.0-beta11",
     "talib": "^1.0.4",
-    "tulind": "^0.8.10",
-    "yargs": "^11.0.0"
+    "tulind": "^0.8.10"
   }
 }
