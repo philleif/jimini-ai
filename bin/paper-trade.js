@@ -1,25 +1,42 @@
 "use strict"
 
-const parse = require("csv-parse/lib/sync")
+const csv = require("csvtojson")
 const fs = require("fs")
+const { predict } = require("../lib/predict")
 
 const run = async () => {
   try {
+    let features = ["adx", "cci", "rocr", "hikkake", "harami", "closingMarubozu",
+      "onNeck", "longLineCandle", "hikkakeModified", "apo", "cmo", "adx",
+      "cvi", "plus_dm", "minus_dm", "plus_di", "minus_di", "dpo", "kvo",
+      "fosc", "fisher", "fisher_signal", "dx", "linregslope", "macd", "macd_signal",
+      "macd_histogram", "mfi", "mom", "obv", "ppo", "pvi", "rsi", "stoch_k", "stoch_d",
+      "atr", "trix", "ultosc", "vosc", "willr", "cmo", "cci", "adosc", "adxr", "ao",
+      "aroonosc"
+    ]
     let net = 0 // net profit
     let tradeAmount = 100 // trade size in dollars
     let trades = []
     let openTrade = false
-    let csv = fs.readFileSync("./data/candles.csv")
+    let csvFilePath = "./data/candles.csv"
+
     // read in CSV of trades
-    let candles = parse(csv)
+    let candles = await csv().fromFile(csvFilePath)
 
-    console.log(candles)
+    // for each candle:
+    for (let candle of candles.slice(1,50)) {
+      // make object with the indicators we want
+      let predictObject = []
+      features.forEach(feature => predictObject.push(candle[feature]))
 
-    // for each row:
+      // get trade prediction on that object
+      let prediction = await predict(predictObject)
 
-    // make object with the indicators we want
+      console.log(prediction)
 
-    // get trade prediction on that object
+    }
+
+
 
     // make approriate trade decision:
 
