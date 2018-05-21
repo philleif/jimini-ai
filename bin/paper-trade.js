@@ -48,7 +48,7 @@ const run = async () => {
     }
 
     // print results
-    console.log("Max Drawdown: $", maxExposure)
+    console.log("Max Exposure: $", maxExposure)
     console.log("Net: $", net)
     console.log("Balance: $", budget)
 
