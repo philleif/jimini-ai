@@ -2,6 +2,7 @@
 
 const csv = require("csvtojson")
 const fs = require("fs")
+const { writeCsv } = require("../lib/csv")
 const { predict } = require("../lib/predict")
 
 const run = async () => {
@@ -12,45 +13,89 @@ const run = async () => {
       "fosc", "fisher", "fisher_signal", "dx", "linregslope", "macd", "macd_signal",
       "macd_histogram", "mfi", "mom", "obv", "ppo", "pvi", "rsi", "stoch_k", "stoch_d",
       "atr", "trix", "ultosc", "vosc", "willr", "cmo", "cci", "adosc", "adxr", "ao",
-      "aroonosc"
-    ]
-    let net = 0 // net profit
-    let tradeAmount = 100 // trade size in dollars
+      "aroonosc" ]
+    let openingBalance = 100
+    let budget = openingBalance // trade size in dollars
+    let net = 0
     let trades = []
-    let openTrade = false
-    let csvFilePath = "./data/candles.csv"
+    let trade = false // holder for current trade
 
     // read in CSV of trades
-    let candles = await csv().fromFile(csvFilePath)
+    let candles = await csv().fromFile("./data/candles.csv")
 
-    // for each candle:
-    for (let candle of candles.slice(1,50)) {
-      // make object with the indicators we want
-      let predictObject = []
-      features.forEach(feature => predictObject.push(candle[feature]))
+    for (let candle of candles) {
+      let price = parseFloat(candle.close)
 
-      // get trade prediction on that object
-      let prediction = await predict(predictObject)
+      // convert candle into array for prediction
+      let predictionObject = []
+      features.forEach(feature => predictionObject.push(candle[feature]))
+      let prediction = await predict(predictionObject)
 
-      console.log(prediction)
+      // no open trade, BUY signal - new trade
+      if (!trade && prediction === 1)
+        trade = await openTrade(price, budget)
 
+      // open trade, BUY signal - add to trade
+      if (trade && prediction === 1)
+        trade = await accumulate(trade, price, budget)
+
+      // open trade, SELL signal - close trade and calculate our position
+      if (trade && prediction === 0) {
+        trade = await closeTrade(trade, price)
+        trades.push(trade)
+        net += trade.net
+        budget += trade.net
+        trade = false
+      }
+
+      console.log(trade)
     }
 
+    // print results
+    console.log("Net: $", net)
+    console.log("Balance: $", budget)
 
+    // write CSV
+    await writeCsv(trades, "./data/trade-results.csv", true)
+  } catch (error) {
+    throw error
+  }
+}
 
-    // make approriate trade decision:
+const openTrade = async (price, budget) => {
+  try {
+    let trade = {
+      open: price,
+      quantity: budget / price
+    }
 
-    // no open trade, BUY, open new trade
+    return trade
+  } catch (error) {
+    throw error
+  }
+}
 
-    // open trade, BUY, do nothing TODO: accumulate
+const accumulate = async (trade, price, budget) => {
+  try {
+    trade.open = (trade.open + price) / 2
+    trade.quantity += budget / price
 
-    // no open trade, SELL, do nothing
+    return trade
+  } catch (error) {
+    throw error
+  }
+}
 
-    // open trade, SELL, close trade and settle net
+const closeTrade = async (trade, price) => {
+  try {
+    trade.close = price
+    trade.netPrice = trade.close - trade.open
+    trade.net = trade.netPrice * trade.quantity
 
-    // write CSV of trades
-    // print net
-  } catch (error) {}
+    return trade
+  } catch (error) {
+    throw error
+  }
 }
 
 run()
