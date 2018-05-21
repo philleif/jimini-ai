@@ -4,21 +4,16 @@ const csv = require("csvtojson")
 const fs = require("fs")
 const { writeCsv } = require("../lib/csv")
 const { predict } = require("../lib/predict")
+const config = require("config")
 
 const run = async () => {
   try {
-    let features = ["adx", "cci", "rocr", "hikkake", "harami", "closingMarubozu",
-      "onNeck", "longLineCandle", "hikkakeModified", "apo", "cmo", "adx",
-      "cvi", "plus_dm", "minus_dm", "plus_di", "minus_di", "dpo", "kvo",
-      "fosc", "fisher", "fisher_signal", "dx", "linregslope", "macd", "macd_signal",
-      "macd_histogram", "mfi", "mom", "obv", "ppo", "pvi", "rsi", "stoch_k", "stoch_d",
-      "atr", "trix", "ultosc", "vosc", "willr", "cmo", "cci", "adosc", "adxr", "ao",
-      "aroonosc" ]
-    let budget = 250 // trade size in dollars
+    let features = config.get("features") // CSV fields for prediction
+    let budget = config.get("budget") // trade size in dollars
     let net = 0
     let trades = []
     let trade = false // holder for current trade
-    let maxDrawDown = 0
+    let maxExposure = 0
 
     // read in CSV of trades
     let candles = await csv().fromFile("./data/candles.csv")
@@ -32,8 +27,7 @@ const run = async () => {
       let prediction = await predict(predictionObject)
 
       // no open trade, BUY signal - new trade
-      if (!trade && prediction === 1)
-        trade = await openTrade(price, budget)
+      if (!trade && prediction === 1) trade = await openTrade(price, budget)
 
       // open trade, BUY signal - add to trade
       if (trade && prediction === 1)
@@ -43,17 +37,18 @@ const run = async () => {
       if (trade && prediction === 0) {
         trade = await closeTrade(trade, price)
         trades.push(trade)
-        maxDrawDown = maxDrawDown <= trade.quantity * price ? trade.quantity * price : maxDrawDown
+        maxExposure =
+          maxExposure <= trade.quantity * price
+            ? trade.quantity * price
+            : maxExposure
         net += trade.net
         budget += trade.net
         trade = false
       }
-
-      //console.log(trade)
     }
 
     // print results
-    console.log("Max Drawdown: $", maxDrawDown)
+    console.log("Max Drawdown: $", maxExposure)
     console.log("Net: $", net)
     console.log("Balance: $", budget)
 
