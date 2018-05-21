@@ -10,11 +10,9 @@ const run = async () => {
                "tDSHUSD", "tTRXUSD", "tBTGUSD", "tXRPBTC", "tEOSBTC", "tETHBTC",
                "tBCHBTC", "tLTCBTC", "tZECBTC", "tIOTBTC", "tXMRBTC", "tETCBTC",
                "tNEOBTC", "tOMGBTC", "tDSHBTC", "tTRXBTC", "tBTGBTC"]*/
-  let pairs = ["tXRPUSD", "tBTCUSD", "tEOSUSD", "tETHUSD", "tBCHUSD", "tLTCUSD",
-  "tZECUSD", "tIOTUSD", "tXMRUSD", "tETCUSD", "tNEOUSD", "tOMGUSD",
-  "tDSHUSD", "tTRXUSD"]
+  let pairs = ["tNEOUSD"]
   //let timeframes = ["5m", "15m", "30m", "1h", "3h", "6h", "12h"]
-  let timeframes = ["15m", "30m", "1h"]
+  let timeframes = ["15m"]
   let filePath = "./data/candles.csv"
   let allCandles = []
 

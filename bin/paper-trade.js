@@ -14,11 +14,11 @@ const run = async () => {
       "macd_histogram", "mfi", "mom", "obv", "ppo", "pvi", "rsi", "stoch_k", "stoch_d",
       "atr", "trix", "ultosc", "vosc", "willr", "cmo", "cci", "adosc", "adxr", "ao",
       "aroonosc" ]
-    let openingBalance = 100
-    let budget = openingBalance // trade size in dollars
+    let budget = 250 // trade size in dollars
     let net = 0
     let trades = []
     let trade = false // holder for current trade
+    let maxDrawDown = 0
 
     // read in CSV of trades
     let candles = await csv().fromFile("./data/candles.csv")
@@ -43,15 +43,17 @@ const run = async () => {
       if (trade && prediction === 0) {
         trade = await closeTrade(trade, price)
         trades.push(trade)
+        maxDrawDown = maxDrawDown <= trade.quantity * price ? trade.quantity * price : maxDrawDown
         net += trade.net
         budget += trade.net
         trade = false
       }
 
-      console.log(trade)
+      //console.log(trade)
     }
 
     // print results
+    console.log("Max Drawdown: $", maxDrawDown)
     console.log("Net: $", net)
     console.log("Balance: $", budget)
 
